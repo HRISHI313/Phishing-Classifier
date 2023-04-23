@@ -1,3 +1,5 @@
 pandas
 numpy
--e .
+seaborn
+pymongo
+
