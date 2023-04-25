@@ -21,8 +21,8 @@ class DataIngestion:
     def initiate_data_ingestion(self):
         logging.info('Entered into the Data ingestion method')
         try:
-            train_df = read_mongodb('train_data')
-            test_df = read_mongodb('test_data')
+            train_df = read_mongodb('user2023','test543', 'train_data')
+            test_df = read_mongodb('user2023','test543', 'test_data')
             logging.info('Read Dataset from mongodb as dataframe')
 
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True)
