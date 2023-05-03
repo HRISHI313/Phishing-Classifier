@@ -4,6 +4,7 @@ import sys
 from src.exception import CustomException
 from src.logger import logging
 from src.utils import read_mongodb
+from src.TrainingPrediction_components.DataTransformation import data_transformer
 
 from sklearn.model_selection import train_test_split
 
@@ -30,6 +31,7 @@ class DataIngestion:
             logging.info('Data concatenating and shuffling initiated')
             data = pd.concat([data1,data2],axis = 0)
             data.sample(frac = 1)
+            data.drop('URL',axis = 1,inplace =True)
             logging.info('Data concatenating and shuffling finished')
 
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True)
@@ -53,7 +55,10 @@ class DataIngestion:
 
 if __name__== '__main__':
     obj = DataIngestion()
-    obj.initiate_data_ingestion()
+    train_data,test_data = obj.initiate_data_ingestion()
+
+    data_transformation = data_transformer()
+    data_transformation.initiate_data_transformer(train_data,test_data)
 
 
 

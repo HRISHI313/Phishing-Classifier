@@ -3,4 +3,4 @@ numpy
 seaborn
 pymongo
 bs4
-
+dill
