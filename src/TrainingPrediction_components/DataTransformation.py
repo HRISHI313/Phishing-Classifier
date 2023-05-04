@@ -4,7 +4,6 @@ import sys
 from src.exception import CustomException
 from src.logger import logging
 from src.utils import save_object
-from src.utils import remove_duplicate
 
 import pandas as pd
 import numpy as np
@@ -35,7 +34,7 @@ class data_transformer:
                     'number_of_div','number_of_figure','has_footer','has_form',
                     'has_text_area','has_iframe','has_text_input','number_of_meta',
                     'has_nav','has_object','has_picture','number_of_sources','number_of_span',
-                    'number_of_table','label']
+                    'number_of_table']
 
             pipeline = Pipeline(steps=[('imputer', SimpleImputer(strategy='median'))])
             logging.info('Removing duplicate and missing values completed')
@@ -64,29 +63,36 @@ class data_transformer:
                 'number_of_img','number_of_div','number_of_figure','has_footer','has_form','has_text_area',\
                 'has_iframe','has_text_input','number_of_meta','has_nav','has_object','has_picture',\
                 'number_of_sources','number_of_span','number_of_table'
-            target_column = 'label'
+
             input_feature_train_df = train_df[list(feature_column)]
-            target_feature_train_df = train_df[target_column]
+            target_feature_train_df = train_df['label']
 
             input_feature_test_df = test_df[list(feature_column)]
-            target_feature_test_df = test_df[target_column]
+            target_feature_test_df = test_df['label']
 
 
             logging.info('Applying preprocessing object on training dataframe and testing dataframe')
 
+            # fit_transform on training set
             input_feature_train_arr = preprocessor_obj.fit_transform(input_feature_train_df)
+            train_arr = np.c_[input_feature_train_arr, np.array(target_feature_train_df)]
+
+            # transform on test set
             input_feature_test_arr = preprocessor_obj.transform(input_feature_test_df)
+            test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
 
-            train_arr = np.c_[input_feature_train_arr,np.array(target_feature_train_df)]
-            test_arr = np.c_[input_feature_test_arr,np.array(target_feature_test_df)]
-
+            # Save Preprocessing object
+            logging.info('Saving Preprocessing object')
+            save_object(self.datatransformer_config.preprocessor_obj_file_path,
+                        obj=preprocessor_obj)
             logging.info('Saved Preprocessing object')
 
-            save_object(self.datatransformer_config.preprocessor_obj_file_path,obj = preprocessor_obj)
-
-
-            return train_arr,test_arr,self.datatransformer_config.preprocessor_obj_file_path
+            return (train_arr,
+                    test_arr,
+                    self.datatransformer_config.preprocessor_obj_file_path)
 
 
         except Exception as e:
             raise CustomException (e,sys)
+
+
