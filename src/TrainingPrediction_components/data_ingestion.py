@@ -25,19 +25,15 @@ class DataIngestion:
     def initiate_data_ingestion(self):
         logging.info('Entered into the Data ingestion method')
         try:
-            data1 = read_mongodb('banerjeeabishek999','mongodb', 'data')
-            data2 = read_mongodb('banerjeeabishek999','mongodb', 'phishy_data')
+            data = read_mongodb('banerjeeabishek999','mongodb', 'data1')
             logging.info('Read Dataset from mongodb as dataframe')
 
-            logging.info('Data concatenating and shuffling initiated')
-            data = pd.concat([data1,data2],axis = 0)
-            data.sample(frac = 1)
+
             data.drop('URL',axis = 1,inplace =True)
-            logging.info('Data concatenating and shuffling finished')
+            data.drop('Unnamed: 0',axis = 1,inplace = True)
+            logging.info('Dropping the URL,Unnamed: 0 columns')
 
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True)
-
-            data.to_csv(self.ingestion_config.raw_data_path,index = False,header = True)
 
             logging.info("train test completed initiated")
             train_data,test_data = train_test_split(data,test_size = 0.3,random_state = 42)
