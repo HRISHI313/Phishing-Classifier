@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import FunctionTransformer
 
 @dataclass
@@ -36,7 +37,8 @@ class data_transformer:
                     'has_nav','has_object','has_picture','number_of_sources','number_of_span',
                     'number_of_table']
 
-            pipeline = Pipeline(steps=[('imputer', SimpleImputer(strategy='median'))])
+            pipeline = Pipeline(steps=[('imputer', SimpleImputer(strategy='median')),
+                                       ('Standard_scalar',StandardScaler())])
             logging.info('Removing duplicate and missing values completed')
 
             preprocessor = ColumnTransformer([('pipeline',pipeline,columns)])
@@ -88,8 +90,7 @@ class data_transformer:
             logging.info('Saved Preprocessing object')
 
             return (train_arr,
-                    test_arr,
-                    self.datatransformer_config.preprocessor_obj_file_path)
+                    test_arr)
 
 
         except Exception as e:
