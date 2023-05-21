@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Phishing Classification</title>
+    <style>
+        body {
+            font-family: "Roboto", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-image: linear-gradient(to bottom, #4E79A7, #F28E2B);
+        }
+
+        h1 {
+            color: #FFF;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #FFF;
+            text-align: center;
+        }
+
+        form {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #FFF;
+        }
+
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input[type="button"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            width: 580px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        #result {
+            text-align: center;
+            margin-top: 20px;
+            color: #FFF;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        #logo-animation {
+            animation: pulse 2s infinite;
+        }
+    </style>
+    <script>
+        function classify() {
+            var urlInput = document.getElementById("url");
+            var url = urlInput.value;
+
+            // Send an AJAX request to your Flask backend for classification
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/predictdata", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var resultContainer = document.getElementById("result");
+                        resultContainer.textContent = xhr.responseText;
+                    } else {
+                        alert("Error: " + xhr.status);
+                    }
+                }
+            };
+            var data = JSON.stringify({ url: url });
+            xhr.send(data);
+        }
+    </script>
+</head>
+<body>
+    <h1>Phishing Classification</h1>
+    <p>This is a webpage for phishing classification.</p>
+
+    <div class="logo-container">
+        <img src="/static/Logo.PNG" alt="Logo" class="logo" id="logo-animation">
+    </div>
+
+    <form>
+        <label for="url">Enter URL:</label>
+        <br>
+        <input type="text" id="url" name="url">
+        <br>
+        <input type="button" value="Classify" onclick="classify()">
+    </form>
+
+    <div id="results"></div>
+</body>
+</html>
