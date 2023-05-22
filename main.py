@@ -1,6 +1,8 @@
 from flask import Flask, request, render_template
 from src.pipeline.prediction_pipeline import CustomData, PredictPipeline
 
+
+
 import pandas as pd
 import numpy as np
 import os
@@ -16,18 +18,19 @@ app = application
 def index():
     return render_template('home.html')
 
-@app.route('/predictdata',methods = ['GET','POST'])
+@app.route("/predictdata", methods=["GET", "POST"])
 def predict_datapoint():
-    if request.method =='GET':
-        return render_template('index.html')
-    else:
-        data = CustomData(url=request.form.get('url'))
-        pred_df = data.get_data_as_data_frame()
-        print(pred_df)
+    if request.method == "POST":
+        url = request.form["url"]
+        obj = CustomData(url)
+        df = obj.get_data_as_dataframe()
 
-        predict_pipeline = PredictPipeline()
-        result = predict_pipeline.predict(pred_df)
-        return render_template('index.html',result = result[0])
+        preds = PredictPipeline.predict(df)
+        # 1 is safe, -1 is unsafe
+        pred = "It is {0:.2f} % safe to go".format(preds[0])
+        return render_template('index.html', xx=pred, url=url)
+    return render_template("index.html", xx=-1)
+
 
 
 if __name__ == "__main__":

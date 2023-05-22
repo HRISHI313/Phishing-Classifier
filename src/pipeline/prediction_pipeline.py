@@ -35,7 +35,7 @@ class CustomData:
     def __init__(self,url:str):
         self.url = url
 
-    def get_data_as_data_frame(self):
+    def get_data_as_dataframe(self):
         logging.info("Logging -4")
         try:
             # Scrape the URL to extract the desired features
@@ -56,11 +56,14 @@ class CustomData:
             raise CustomException(e, sys)
 
     def scrape_url(self, url):
+        logging.info("Logging-A")
         try:
             response = requests.get(url, timeout=10)
             if response.status_code != 200:
                 logging.error(f"HTTP connection was not successful for the URL: {url}")
                 return None
+
+            logging.info('Logging-B')
 
             soup = BeautifulSoup(response.content, "html.parser")
             features = {
@@ -110,6 +113,7 @@ class CustomData:
             }
 
             return features
+            logging.info('Logging-C')
 
         except Exception as e:
             logging.error(f"An error occurred while scraping the URL: {e}")
