@@ -15,20 +15,19 @@ class PredictPipeline:
 
     def predict(self,df):
         logging.info('Logging 1')
+        try:
+            model_path = 'artifacts/model.pkl'
+            preprocessor_path = 'artifacts/preprocessor.pkl'
+            model = load_object(file_path=model_path)
+            preprocessor = load_object(file_path=preprocessor_path)
+            data_scaled = preprocessor.transform(df)
+            preds = model.predict(data_scaled)
+            return preds
 
-        model_path = 'artifacts/model.pkl'
-        preprocessor_path = 'artifacts/preprocessor.pkl'
-        model = load_object(file_path=model_path)
-        preprocessor = load_object(file_path=preprocessor_path)
-        data_scaled = preprocessor.transform(df)
-        preds = model.predict(data_scaled)
-        return preds
+            logging.info('logging-2')
 
-        logging.info('logging-2')
-
-
-
-
+        except Exception as e:
+            raise CustomException(e, sys)
 
 
 class CustomData:
