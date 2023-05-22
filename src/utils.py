@@ -2,6 +2,8 @@ import pymongo
 import pandas as pd
 import dill
 import os
+import sys
+import pickle
 from src.exception import CustomException
 
 from sklearn.metrics import accuracy_score
@@ -51,7 +53,14 @@ def load_object(file_path):
             return pickle.load(file_obj)
 
     except Exception as e:
-        raise CustomException(e, sys)
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            error_message = str(e)
+            error_detail = f"{exc_type.__name__}: {exc_value}"
+            raise CustomException(error_message, error_detail)
+
+
+
+
 
 
 
