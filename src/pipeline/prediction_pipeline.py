@@ -5,6 +5,8 @@ import pandas as pd
 from src.exception import CustomException
 from src.utils import load_object
 from src.logger import logging
+import traceback
+import numpy as np
 
 import requests
 from bs4 import BeautifulSoup
@@ -14,20 +16,25 @@ class PredictPipeline:
         pass
 
     def predict(self,df):
-        logging.info('Logging 1')
+        logging.info('Logging 11')
         try:
             model_path = 'artifacts/model.pkl'
             preprocessor_path = 'artifacts/preprocessor.pkl'
+            logging.info('Logging-22')
             model = load_object(file_path=model_path)
             preprocessor = load_object(file_path=preprocessor_path)
+            logging.info('Logging-33')
             data_scaled = preprocessor.transform(df)
+            logging.info(f'Logging-44{data_scaled}')
             preds = model.predict(data_scaled)
+            logging.info(f'Logging-55{preds}')
             return preds
 
             logging.info('logging-2')
 
         except Exception as e:
-            raise CustomException(e, sys)
+            logging.error(f"An error occurred while scraping the URL: {e}")
+            raise CustomException(e)
 
 
 class CustomData:
@@ -40,20 +47,40 @@ class CustomData:
         try:
             # Scrape the URL to extract the desired features
             features = self.scrape_url(self.url)
+            logging.info("Logging -5")
 
 
             # Convert boolean features to 1 or 0
-            converted_features = {key: int(value) for key, value in features.items() if isinstance(value, bool)}
+            # converted_features = {key: int(value) for key, value in features.items() if isinstance(value, bool)}
+            # logging.info(f"Logging -6: {converted_features}")
 
 
              # Create a DataFrame from the converted features
-            df = pd.DataFrame([converted_features])
-
+            df = pd.DataFrame([features])
+            logging.info(f"Logging -7 : {df}")
             return df
-            logging.info("Logging -5")
-
         except Exception as e:
-            raise CustomException(e, sys)
+            logging.error(f"An error occurred while scraping the URL: {e}")
+            raise CustomException(e)
+
+# class CustomData:
+#     def __init__(self, url):
+#         self.url = url
+#     def get_data_as_array(self):
+#         try:
+#             # Scrape the URL to extract the desired features
+#             features = self.scrape_url(self.url)
+#
+#             # Convert boolean features to 1 or 0
+#             converted_features = {key: int(value) for key, value in features.items() if isinstance(value, bool)}
+#
+#             # Convert the converted features to a NumPy array
+#             data = np.array(list(converted_features.values())).reshape(1, -1)
+#
+#             return data
+#         except Exception as e:
+#             logging.error(f"An error occurred while scraping the URL: {e}")
+#             raise CustomException(e)
 
     def scrape_url(self, url):
         logging.info("Logging-A")
@@ -111,9 +138,9 @@ class CustomData:
                 'number_of_span': len(soup.find_all("span")),
                 'number_of_table': len(soup.find_all("table")),
             }
+            logging.info(f'My features: {features}')
 
             return features
-            logging.info('Logging-C')
 
         except Exception as e:
             logging.error(f"An error occurred while scraping the URL: {e}")
