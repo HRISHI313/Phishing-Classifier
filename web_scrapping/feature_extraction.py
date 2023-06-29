@@ -1,7 +1,8 @@
 from bs4 import BeautifulSoup
 import os
-import feature as fe
+from web_scrapping import feature as fe
 import pandas as pd
+
 
 # 1 DEFINE A FUNCTION THAT OPENS A HTML FILE AND RETURNS THE CONTENT
 file_name = "mini_dataset/9.html"

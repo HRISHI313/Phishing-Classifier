@@ -5,11 +5,13 @@ import os
 import sys
 import pickle
 from src.exception import CustomException
+from bs4 import BeautifulSoup
+from web_scrapping import feature as fe
 
 from sklearn.metrics import accuracy_score
 
 def read_mongodb(user,password,collection):
-    client1 = pymongo.MongoClient("mongodb+srv://{}:{}@cluster0.numsybe.mongodb.net/?retryWrites=true&w=majority".format(user,password))
+    client1 = pymongo.MongoClient("mongodb+srv://{}:{}@phishing.duugaug.mongodb.net/?retryWrites=true&w=majority".format(user,password))
     db = client1['Phishing_classifier']
     cursor = db['{}'.format(collection)].find()
     dataframe = pd.DataFrame(list(cursor))
@@ -57,6 +59,7 @@ def load_object(file_path):
             error_message = str(e)
             error_detail = f"{exc_type.__name__}: {exc_value}"
             raise CustomException(error_message, error_detail)
+
 
 
 
