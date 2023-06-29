@@ -13,18 +13,7 @@ To install and set up the project, please follow these step-by-step instructions
 
 
 pip install -r requirements.txt
+ 
 
-The Data has given in the artifacts folder so change the file path before 
 
-Open the src/utils.py file in a text editor.
-Locate the read_mongodb function.
-Update the MongoDB connection parameters (e.g., host, username, password, database) according to your MongoDB server configuration.
-Run the project:
 
-Open a terminal or command prompt.
-Navigate to the project directory (hrishi123).
-Execute the following command to run the project:
-css
-Copy code
-python main.py
-The project will execute and output the results in the terminal or command prompt.
