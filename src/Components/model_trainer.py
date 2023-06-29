@@ -14,16 +14,15 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.gaussian_process.kernels import RBF
 from sklearn.metrics import confusion_matrix
-import pickle
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-# Step 2 read the files from MongDB
-legitimate_df = read_mongodb('banerjeeabishek999','hrishi123','data1')
-phishing_df = read_mongodb('banerjeeabishek999','hrishi123','data2')
-logging.info('Importing data from MongoDB Server')
-
+# Step 2 read the files
+legitimate_df = pd.read_csv("artifacts/structured_data_legitimate.csv")
+phishing_df = pd.read_csv("artifacts/structured_data_phishing.csv")
+logging.info('Importing data')
 
 # Step 3 combine legitimate and phishing dataframes, and shuffle
 logging.info("initiated combining legitimate and phishing dataframes, and shuffle")
