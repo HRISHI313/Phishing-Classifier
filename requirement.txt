@@ -7,3 +7,4 @@ dill
 Flask
 streamlit
 matplotlib
+Jinja2
